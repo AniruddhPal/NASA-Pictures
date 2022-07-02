@@ -14,4 +14,12 @@
         android:fitsSystemWindows="true"
         app:titleTextColor="@color/white" />
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_actionbar"
+        android:layout_margin="@dimen/dimen5" />
+
+
 </RelativeLayout>
