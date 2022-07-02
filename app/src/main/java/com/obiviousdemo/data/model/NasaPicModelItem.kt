@@ -2,6 +2,7 @@ package com.obiviousdemo.data.model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class NasaPicModelItem(
     @SerializedName("copyright")
@@ -20,4 +21,4 @@ data class NasaPicModelItem(
     var title: String?,
     @SerializedName("url")
     var url: String?
-)
+):Serializable

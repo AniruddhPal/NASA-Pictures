@@ -8,14 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.obiviousdemo.R
 import com.obiviousdemo.data.model.NasaPicModelItem
+import com.obiviousdemo.ui.interfaces.GenericListClickListner
 
-class NasaPicRecycleAdapter(val itemList: ArrayList<NasaPicModelItem>, val context: Context) :
+class NasaPicRecycleAdapter(
+    val itemList: ArrayList<NasaPicModelItem>,
+    val context: Context,
+    val genericListClickListner: GenericListClickListner
+) :
     RecyclerView.Adapter<NasaPicRecycleAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -36,7 +40,11 @@ class NasaPicRecycleAdapter(val itemList: ArrayList<NasaPicModelItem>, val conte
 
 
         holder.textViewTitle.text = itemList.get(position).title
-        Log.v("NasaPicRecycleAdapter", "Demo Date ::: " + itemList.get(position).date)
+
+
+        holder.cardViewList.setOnClickListener(View.OnClickListener {
+            genericListClickListner.itemClicked(itemList.get(position), position, 1, null)
+        })
     }
 
     override fun getItemCount(): Int {
@@ -46,6 +54,7 @@ class NasaPicRecycleAdapter(val itemList: ArrayList<NasaPicModelItem>, val conte
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imageViewUrl = itemView.findViewById<ImageView>(R.id.iv_item)
         var textViewTitle = itemView.findViewById<TextView>(R.id.txtview_title)
+        var cardViewList = itemView.findViewById<CardView>(R.id.cardview_list)
 
     }
 }

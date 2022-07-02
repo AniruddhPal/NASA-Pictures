@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.ImageDetailsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_actionbar"
@@ -13,12 +13,5 @@
         android:background="@color/purple_700"
         android:fitsSystemWindows="true"
         app:titleTextColor="@color/white" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_nasa_pic_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_actionbar"
-        android:layout_margin="10dp" />
 
 </RelativeLayout>
