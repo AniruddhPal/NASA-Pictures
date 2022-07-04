@@ -18,18 +18,17 @@ import com.obiviousdemo.ui.interfaces.GenericListClickListner
 import com.obiviousdemo.utils.Constants
 import com.obiviousdemo.viewmodel.NasaPicViewModel
 
-lateinit var recycleNadaPicList: RecyclerView
+private lateinit var recycleNadaPicList: RecyclerView
 
-lateinit var nasaPicViewModel: NasaPicViewModel
+private lateinit var nasaPicViewModel: NasaPicViewModel
 lateinit var repository: DataRepository
-lateinit var itemPicList: ArrayList<NasaPicModelItem>
-lateinit var toolbar : Toolbar
+private lateinit var itemPicList: ArrayList<NasaPicModelItem>
+lateinit var toolbar: Toolbar
 
 class MainActivity : AppCompatActivity(), GenericListClickListner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        val bind = ButterKnife.bind(this)
         toolbar = findViewById(R.id.toolbar_actionbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setTitle("Home")

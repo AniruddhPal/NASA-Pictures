@@ -10,4 +10,8 @@
     <dimen name="dimen8">8dp</dimen>
     <dimen name="dimen500">500dp</dimen>
     <dimen name="dimen60">60dp</dimen>
+
+    <dimen name="textdimen14">14sp</dimen>
+
+
 </resources>

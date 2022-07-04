@@ -50,11 +50,6 @@ class ImageDetailsActivity : AppCompatActivity() {
         if (itemListFromIntent.size > 0) {
             NUM_PAGES = itemListFromIntent.size
         }
-
-//        Log.v("ImageDetailsActivity", "ArrayList ::: " + itemListFromIntent.toString())
-//        Log.v("ImageDetailsActivity", "ArrayList size::: " + itemListFromIntent.size.toString())
-//        Log.v("ImageDetailsActivity", "ArrayList position::: " + positionFromIntent)
-
     }
 
     private fun onClickEvents() {
@@ -74,32 +69,14 @@ class ImageDetailsActivity : AppCompatActivity() {
     private fun pagerAdapter() {
         val pagerAdapter = ScreenSlidePagerAdapter(this)
         viewPager.adapter = pagerAdapter
-//        viewPager.currentItem = positionFromIntent
-        Log.v("ImageDetailsActivity", "pager Position ::: " + viewPager.currentItem.toString())
-        Log.v("ImageDetailsActivity", "pager NUM_PAGES ::: " + NUM_PAGES.toString())
-
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                Log.v("ImageDetailsActivity", "onPageSelected::: " + position.toString())
-//                viewPager.currentItem = position
-                super.onPageSelected(position)
-            }
-
-            /*override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                Log.v("ImageDetailsActivity", "onPageScrolled::: " + position.toString())
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-            }*/
-        })
+        viewPager.currentItem = positionFromIntent
+        viewPager.offscreenPageLimit= ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
     }
 
     private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int = NUM_PAGES
-        override fun createFragment(position: Int): Fragment =
-            DataFragment.newInstance(itemListFromIntent, viewPager.currentItem)
+        override fun createFragment(position: Int) =  DataFragment.newInstance(itemListFromIntent, position)
+
     }
 
 }
