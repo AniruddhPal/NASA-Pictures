@@ -11,25 +11,28 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.obiviousdemo.MyApplicationClass
 import com.obiviousdemo.R
+import com.obiviousdemo.data.model.NasaPicModel
 import com.obiviousdemo.data.model.NasaPicModelItem
 import com.obiviousdemo.data.repository.DataRepository
 import com.obiviousdemo.ui.adapter.NasaPicRecycleAdapter
 import com.obiviousdemo.ui.interfaces.GenericListClickListner
 import com.obiviousdemo.utils.Constants
+import com.obiviousdemo.utils.Helper
 import com.obiviousdemo.viewmodel.NasaPicViewModel
 
-private lateinit var recycleNadaPicList: RecyclerView
-
-private lateinit var nasaPicViewModel: NasaPicViewModel
-lateinit var repository: DataRepository
-private lateinit var itemPicList: ArrayList<NasaPicModelItem>
-lateinit var toolbar: Toolbar
-
 class MainActivity : AppCompatActivity(), GenericListClickListner {
+
+    private lateinit var recycleNadaPicList: RecyclerView
+    private lateinit var nasaPicViewModel: NasaPicViewModel
+    lateinit var repository: DataRepository
+    private lateinit var itemPicList: ArrayList<NasaPicModelItem>
+    lateinit var toolbar: Toolbar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        toolbar = findViewById(R.id.toolbar_actionbar) as Toolbar
+
+        toolbar = findViewById(R.id.toolbar_actionbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setTitle("Home")
         repository = (application as MyApplicationClass).dataRepository
@@ -38,29 +41,33 @@ class MainActivity : AppCompatActivity(), GenericListClickListner {
             NasaPicViewModelFactory(repository)
         ).get(NasaPicViewModel::class.java)*/
 
-        nasaPicViewModel = NasaPicViewModel(repository);
+        nasaPicViewModel = NasaPicViewModel(getJsonDataFromAsset(),repository)
         setRecycleView()
 
     }
+
+    private fun getJsonDataFromAsset(): String? =
+        Helper.getJsonFromAssets(this, "data.json")
 
     /**
      * Observes liveData and set list to recycleView adapter
      */
     fun setRecycleView() {
         recycleNadaPicList = findViewById(R.id.recycle_nasa_pic_list)
-        nasaPicViewModel.nasaPicList.observe(this, {
+        nasaPicViewModel.nasaPicList.observe(this) {
             itemPicList = it
             if (itemPicList.size > 0) {
                 itemPicList.sortByDescending { it.date }
                 if (recycleNadaPicList.adapter == null) {
-                    recycleNadaPicList.adapter = NasaPicRecycleAdapter(itemPicList, this, this)
+                    recycleNadaPicList.adapter = NasaPicRecycleAdapter(itemPicList, this)
                     recycleNadaPicList.layoutManager = LinearLayoutManager(this)
                 } else {
-                    recycleNadaPicList.adapter!!.notifyDataSetChanged()
+                    recycleNadaPicList.adapter?.notifyDataSetChanged()
                 }
             }
-        })
+        }
     }
+
 
     /***
      * @param obj: Object from list as per position from adapter

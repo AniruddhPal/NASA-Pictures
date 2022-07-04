@@ -46,7 +46,7 @@ class ImageDetailsActivity : AppCompatActivity() {
         val intent = getIntent().extras
         itemListFromIntent =
             intent?.getSerializable(Constants.INTENT_LIST) as ArrayList<NasaPicModelItem>
-        positionFromIntent = intent!!.getInt(Constants.INTENT_ITEM_POSITION)
+        positionFromIntent = intent?.getInt(Constants.INTENT_ITEM_POSITION)
         if (itemListFromIntent.size > 0) {
             NUM_PAGES = itemListFromIntent.size
         }

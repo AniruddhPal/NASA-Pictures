@@ -8,10 +8,10 @@ import com.obiviousdemo.data.repository.DataRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NasaPicViewModel(private val dataRepository: DataRepository) : ViewModel() {
+class NasaPicViewModel(private val json: String?,private val dataRepository: DataRepository) : ViewModel() {
 
     init {
-        viewModelScope.launch(Dispatchers.IO) { dataRepository.getJsonDataFromAsset() }
+        viewModelScope.launch(Dispatchers.IO) { dataRepository.getJsonDataFromAsset(json) }
     }
 
     val nasaPicList: LiveData<NasaPicModel>

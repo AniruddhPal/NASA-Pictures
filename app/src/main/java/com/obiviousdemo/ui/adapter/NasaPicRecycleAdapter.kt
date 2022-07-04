@@ -17,44 +17,47 @@ import com.obiviousdemo.ui.interfaces.GenericListClickListner
 
 class NasaPicRecycleAdapter(
     val itemList: ArrayList<NasaPicModelItem>,
-    val context: Context,
     val genericListClickListner: GenericListClickListner
-) :
-    RecyclerView.Adapter<NasaPicRecycleAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<NasaPicRecycleAdapter.MyViewHolder>() {
+
+    var context: Context?=null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.item_recycle, parent, false)
-
-
+        context = parent.context
         return MyViewHolder(view);
 
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        Glide.with(context)
-            .load(itemList.get(position).url)
-            .into(holder.imageViewUrl)
-            .onLoadStarted(context.getDrawable(R.drawable.ic_placeholder_24))
-
-
-        holder.textViewTitle.text = itemList.get(position).title
-
-
-        holder.cardViewList.setOnClickListener(View.OnClickListener {
-            genericListClickListner.itemClicked(itemList.get(position), position, 1, null)
-        })
+        holder.bind(itemList[position])
     }
 
-    override fun getItemCount(): Int {
-        return itemList.size
-    }
+    override fun getItemCount(): Int = itemList.size
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imageViewUrl = itemView.findViewById<ImageView>(R.id.iv_item)
         var textViewTitle = itemView.findViewById<TextView>(R.id.txtview_title)
         var cardViewList = itemView.findViewById<CardView>(R.id.cardview_list)
+
+        fun bind(nasaPic: NasaPicModelItem){
+            context?.let {
+                Glide.with(it)
+                    .load(nasaPic.url)
+                    .into(imageViewUrl)
+                    .onLoadStarted(context!!.getDrawable(R.drawable.ic_placeholder_24))
+            }
+
+
+            textViewTitle.text = nasaPic.title
+
+
+            cardViewList.setOnClickListener(View.OnClickListener {
+                genericListClickListner.itemClicked(nasaPic, adapterPosition, 1, null)
+            })
+        }
 
     }
 }

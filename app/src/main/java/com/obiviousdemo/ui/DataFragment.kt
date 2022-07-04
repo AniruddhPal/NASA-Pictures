@@ -19,19 +19,12 @@ import org.apache.commons.lang3.StringUtils
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val LIST_FROM_BUNDLE = "param1"
-private const val POSITION_FROM_BUNDLE = "param2"
+private const val LIST_FROM_BUNDLE = "list_from_bundle"
+private const val POSITION_FROM_BUNDLE = "position_from_bundle"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DataFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DataFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: ArrayList<NasaPicModelItem>? = null
-    private var param2: Int = 0
+    private var picList: ArrayList<NasaPicModelItem>? = null
+    private var listItemPosition: Int = 0
 
     private lateinit var imageView: ImageView
     private lateinit var textTitle: TextView
@@ -44,7 +37,6 @@ class DataFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_data, container, false)
         return view
     }
@@ -52,28 +44,19 @@ class DataFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            param1 = it.getSerializable(LIST_FROM_BUNDLE) as ArrayList<NasaPicModelItem>
-            param2 = it.getInt(POSITION_FROM_BUNDLE)
+            picList = it.getSerializable(LIST_FROM_BUNDLE) as ArrayList<NasaPicModelItem>
+            listItemPosition = it.getInt(POSITION_FROM_BUNDLE)
         }
         initRef(view)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 List of object .
-         * @param param2 Position of object in the list.
-         * @return A new instance of fragment DataFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: ArrayList<NasaPicModelItem>, param2: Int) =
+        fun newInstance(nasaPicList: ArrayList<NasaPicModelItem>, position: Int) =
             DataFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(LIST_FROM_BUNDLE, param1)
-                    putInt(POSITION_FROM_BUNDLE, param2)
+                    putSerializable(LIST_FROM_BUNDLE, nasaPicList)
+                    putInt(POSITION_FROM_BUNDLE, position)
                 }
             }
     }
@@ -85,14 +68,14 @@ class DataFragment : Fragment() {
         textDate = activity?.findViewById(R.id.date) as TextView
         textExplaination = activity?.findViewById(R.id.explaination) as TextView
 
-        setValue(param2)
+        setValue(listItemPosition)
     }
 
-    private fun setValue(param2: Int) {
-        val item: NasaPicModelItem = param1!!.get(param2)
+    private fun setValue(position: Int) {
+        val item: NasaPicModelItem? = picList?.get(position)
         Glide.with(this)
             .asBitmap()
-            .load(item.hdurl)
+            .load(item?.hdurl)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     imageView.setImageBitmap(resource)
@@ -103,26 +86,26 @@ class DataFragment : Fragment() {
             })
 
 
-        if (!StringUtils.isEmpty(item.copyright)) {
+        if (!StringUtils.isEmpty(item?.copyright)) {
             textCopyRight.text =
-                context?.resources?.getString(R.string.copyright_symbol) + " " + item.copyright
+                context?.resources?.getString(R.string.copyright_symbol) + " " + item?.copyright
         }
 
-        if (!StringUtils.isEmpty(item.title)) {
-            textTitle.text = item.title
+        if (!StringUtils.isEmpty(item?.title)) {
+            textTitle.text = item?.title
         }
 
-        if (!StringUtils.isEmpty(item.date)) {
+        if (!StringUtils.isEmpty(item?.date)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                textDate.text = "Date : " + LocalDate.parse(item.date)
+                textDate.text = "Date : " + LocalDate.parse(item?.date)
                     .format(DateTimeFormatter.ofPattern("dd-MMMM-yyyy"))
             } else {
-                textDate.text = "Date : " + item.date
+                textDate.text = "Date : " + item?.date
             }
         }
 
-        if (!StringUtils.isEmpty(item.explanation)) {
-            textExplaination.text = "Explaination : " + item.explanation
+        if (!StringUtils.isEmpty(item?.explanation)) {
+            textExplaination.text = "Explaination : " + item?.explanation
         }
     }
 

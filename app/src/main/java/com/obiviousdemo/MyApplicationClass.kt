@@ -15,7 +15,7 @@ class MyApplicationClass : Application() {
 
     private fun intialize() {
         try {
-            dataRepository = DataRepository(applicationContext)
+            dataRepository = DataRepository()
         } catch (e: Exception) {
             e.printStackTrace()
         }

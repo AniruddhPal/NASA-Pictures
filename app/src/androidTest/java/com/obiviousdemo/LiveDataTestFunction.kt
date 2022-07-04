@@ -2,6 +2,9 @@ package com.obiviousdemo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
@@ -20,14 +23,21 @@ fun <T> LiveData<T>.getOrAwaitValue(
             this@getOrAwaitValue.removeObserver(this)
         }
     }
-    this.observeForever(observer)
+
+    GlobalScope.launch(Dispatchers.Main) {
+        observeForever(observer)
+    }
+
+
     try {
         afterObserve.invoke()
         if (!latch.await(time, timeUnit)) {
             throw TimeoutException("LiveData value was never set.")
         }
     } finally {
-        this.removeObserver(observer)
+        GlobalScope.launch(Dispatchers.Main) {
+            removeObserver(observer)
+        }
     }
     @Suppress("UNCHECKED_CAST")
     return data as T
